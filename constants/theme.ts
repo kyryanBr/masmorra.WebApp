@@ -4,9 +4,20 @@
  */
 
 import { Platform } from 'react-native';
+import { DefaultTheme } from 'react-native-paper';
 
 const tintColorLight = '#0a7ea4';
 const tintColorDark = '#fff';
+
+
+export const theme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: '#4caf50', // aqui você troca o roxo
+    accent: '#ff9800',
+  },
+};
 
 export const Colors = {
   light: {

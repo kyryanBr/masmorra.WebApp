@@ -1,24 +1,36 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+import { Slot } from "expo-router";
+import { ActivityIndicator, View } from "react-native";
+import { useFonts, IMFellEnglish_400Regular } from "@expo-google-fonts/im-fell-english";
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { Provider as PaperProvider, DefaultTheme } from "react-native-paper";
+import { Colors } from "../constants/theme";
 
-export const unstable_settings = {
-  anchor: '(tabs)',
+const theme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: Colors.light.tint,
+    accent: '#ff9800',
+  },
+
 };
 
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
+export default function Layout() {
+  const [fontsLoaded] = useFonts({
+    IMFellEnglish_400Regular,
+  });
+
+  if (!fontsLoaded) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator />
+      </View>
+    );
+  }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <PaperProvider theme={theme}>
+      <Slot />
+    </PaperProvider>
   );
 }
