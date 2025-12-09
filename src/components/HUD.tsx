@@ -3,18 +3,16 @@ import { View, TouchableOpacity, Image  } from "react-native";
 import { Card, Text, useTheme } from 'react-native-paper';
 
 import HpBar from "../../src/components/HpBar"
-import InventoryDrawer from "./InventoryDrawer";
 
-
-export default function HUD({ campanha, hpAtual, hpTotal}: { campanha: string, hpAtual: number, hpTotal:number }) {
+interface IProps {
+  campanha: string;
+  hpAtual: number;
+  hpTotal: number;
+  onOpenInventory: () => void; // nova prop para abrir o inventário
+}
+export default function HUD({ campanha, hpAtual, hpTotal, onOpenInventory }: IProps) {
   
   const { colors } = useTheme();
-  const [drawerVisible, setDrawerVisible] = React.useState(false);
-  const inventario = [
-    { id: 1, nome: "Espada", quantidade: 1 },
-    { id: 2, nome: "Poção de Vida", quantidade: 5 },
-    { id: 3, nome: "Escudo", quantidade: 1 },
-  ];
 
   return (
     <View>
@@ -38,7 +36,7 @@ export default function HUD({ campanha, hpAtual, hpTotal}: { campanha: string, h
                 }}>
                   <HpBar atual={hpAtual} total={hpTotal}></HpBar> 
                 </View>
-                  <TouchableOpacity onPress={() => setDrawerVisible(true)}>
+                  <TouchableOpacity onPress={onOpenInventory}>
                     <Image
                     source={{ uri: "https://img.icons8.com/ios-filled/50/ffffff/rucksack.png" }}
                     style={{ 

@@ -20,6 +20,7 @@ import { useGameStore } from "../src/storage/game.store"
 
 
 import {TipoCenaEnum} from "../src/enums/TipoCenaEnum"
+import InventoryDrawer from "@/src/components/InventoryDrawer";
 
 
 export default function Game() {
@@ -27,6 +28,12 @@ const [_campanha, setCampanha] = useState<Campanha | null>(null);
 const [_personagem, setPersonagem] = useState<PersonagemPostResponse | null>(null);
 const [_goToBattle, setGoToBatlle] = useState<boolean>(false);
 const [_isLoading, setLoading] = useState<boolean>(false);
+  const [drawerVisible, setDrawerVisible] = useState(false);
+   const inventario = [
+    { id: 1, nome: "Espada", quantidade: 1 , descricao: "Descrição do item aqui 1"},
+    { id: 2, nome: "Poção de Vida", quantidade: 5, descricao: "Descrição do item aqui 2" },
+    { id: 3, nome: "Escudo", quantidade: 1 , descricao: "Descrição do item aqui 3"},
+  ];
 
 const idCampanha = Number(useGameStore((state) => state.campanhaSelecionada));
 
@@ -99,7 +106,7 @@ const idCampanha = Number(useGameStore((state) => state.campanhaSelecionada));
         width: "100%"
       }}>
         {_personagem &&
-          <Hud campanha={'Nome da campanha aqui'} hpAtual={_personagem?.hpAtual ?? 0} hpTotal={_personagem?.hpTotal ?? 0} ></Hud>
+          <Hud campanha={'Nome da campanha aqui'} hpAtual={_personagem?.hpAtual ?? 0} hpTotal={_personagem?.hpTotal ?? 0} onOpenInventory={() => setDrawerVisible(true)} ></Hud>
         }
       </View>
       <ScrollView
@@ -182,12 +189,17 @@ const idCampanha = Number(useGameStore((state) => state.campanhaSelecionada));
              <Button 
               onPress={() => limparStoragePersonagem()}>
                   reiniciar
-              </Button> 
+              </Button>            
           </>
         )
       }
      
 </ScrollView>
+ <InventoryDrawer
+              visible={drawerVisible}
+              onClose={() => setDrawerVisible(false)}
+              inventario={inventario}
+            />
     </View>
   );
 }
