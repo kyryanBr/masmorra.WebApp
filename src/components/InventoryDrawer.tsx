@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, ScrollView, Text, StyleSheet,Image, TouchableOpacity } from "react-native";
-import { Drawer, IconButton, Card,Button, Tooltip } from "react-native-paper";
+import { Drawer, IconButton, Card, Tooltip } from "react-native-paper";
+import Button from "../components/Button";
 import * as Animatable from "react-native-animatable";
 
 interface ItemInventario {
@@ -25,6 +26,12 @@ export default function InventoryDrawer({
 }: InventoryDrawerProps) {
   if (!visible) return null; // não renderiza se não estiver visível
 
+  const [selectedItem, setSelectedItem] = useState<number | null>(null);
+  
+  function toggle(id: number) {
+  setSelectedItem(selectedItem === id ? null : id);
+}
+
   return (
     <View style={styles.overlay}>
       <Animatable.View
@@ -40,53 +47,44 @@ export default function InventoryDrawer({
         <ScrollView>
           <Drawer.Section>
             {inventario.map((item) => (<>
-              <Card>
+              <Card style={{
+                marginBottom: 3,
+              }}>
                 <Card.Content style={{
                 }}>
-                <View style={{
-                    flexDirection: "row",
-                }}>
+                  <TouchableOpacity 
+                  onPress={() => toggle(item.id)}
+                    >
                     <View style={{
-                        flexDirection: "column",
-                        marginHorizontal: 8
+                        flexDirection: "row",
                     }}>
-                        <Text style={{
-                            fontWeight: "bold"
-                            }}>{item.nome}
-                        </Text>
-                        <Text style={{
-                            fontWeight: "light"
-                            }}>{item.descricao}
-                        </Text>
+                        <View style={{
+                            flexDirection: "column",
+                            marginHorizontal: 8,
+                        }}>
+                            <Text style={{
+                                fontWeight: "bold"
+                                }}>{item.nome}
+                            </Text>
+                            <Text style={{
+                                fontWeight: "light",
+                                }}>{item.descricao}
+                            </Text>
+                        </View>
                     </View>
-                    <Tooltip title="Usar">
-                        <TouchableOpacity onPress={() => console.log('teste')}>
-                            <Image
-                            source={{ uri: "https://img.icons8.com/ios-filled/50/ffffff/rucksack.png" }}
-                            style={{ 
-                            width: 35, 
-                            height: 35,
-                            //   backgroundColor: colors.primary,
-                            borderRadius: 20
-                            }}
-                        />
-                        </TouchableOpacity>   
-                    </Tooltip>
-                    <Tooltip title="Visualizar" leaveTouchDelay={30}>
-                        <TouchableOpacity onPress={() => console.log('teste')}>
-                            <Image
-                            source={{ uri: "https://img.icons8.com/ios-filled/50/ffffff/rucksack.png" }}
-                            style={{ 
-                            width: 35, 
-                            height: 35,
-                            //   backgroundColor: colors.primary,
-                            borderRadius: 20
-                            }}
-                        />
-                        </TouchableOpacity>   
-                    </Tooltip>
-                </View>
+                  </TouchableOpacity>
                 </Card.Content>
+                 {selectedItem === item.id && (
+                <Card.Content style={{
+                  flexDirection:"row"
+                }}>
+                  <Button  
+                  mode="text"
+                  onPress={() =>console.log('usou o item')}>
+                    Usar
+                  </Button>
+                </Card.Content>
+              )}
               </Card>
             </>
             ))}
